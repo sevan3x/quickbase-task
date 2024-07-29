@@ -24,7 +24,7 @@ class FreshdeskClient:
 
         if resp.status_code == 201:
             logger.info("Contact created successfully.")
-            return resp
         else:
             logger.error("Failed to create a contact.")
-            return resp
+
+        return resp
