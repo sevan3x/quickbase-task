@@ -1,3 +1,3 @@
 import sys
 
-sys.path.append("C:\\Users\\Specter\\PycharmProjects\\QuickbaseTask")
+sys.path.append("INSERT_LOCAL_PATH_TO_PROJECT\\QuickbaseTask")
