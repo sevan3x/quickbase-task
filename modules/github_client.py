@@ -2,6 +2,8 @@ from os import environ
 
 import requests
 
+from library.logger import logger
+
 
 class GithubClient:
     def __init__(self):
@@ -13,10 +15,13 @@ class GithubClient:
         }
 
     def get_user_data(self, username):
+        logger.info("A request to Github is being made.")
         resp = requests.get(f"{self.main_url}{username}", headers=self.headers)
+        logger.debug(f"Github response: {resp.text}")
 
         if self._response_status_code_is_erroneous(resp):
-            return self._warn_erroneous_status_codes(resp)
+            self._warn_erroneous_status_codes(resp)
+            return None
 
         return resp
 
@@ -28,17 +33,13 @@ class GithubClient:
 
     @staticmethod
     def _warn_erroneous_status_codes(resp):
-        """
-        This function is supposed to be implemented with logger
-        instead of just returning/printing these statements.
-        """
         if resp.status_code == 404:
-            return "Github token was not provided."
-        elif resp. status_code == 403:
-            return "Provided token permissions are insufficient."
+            logger.error("Github token was not provided.")
+        elif resp.status_code == 403:
+            logger.error("Provided token permissions are insufficient.")
         elif resp.status_code == 401:
-            return "Invalid credentials. Please authenticate."
+            logger.error("Invalid credentials. Please authenticate.")
         elif resp.status_code == 304:
-            return "Not modified since last requested."
+            logger.error("Not modified since last requested.")
         else:
-            return "There has been a problem with your requests to Github."
+            logger.error("There has been a problem with your requests to Github.")

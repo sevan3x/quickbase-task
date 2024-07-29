@@ -3,6 +3,8 @@ from os import environ
 import json
 import requests
 
+from library.logger import logger
+
 
 class FreshdeskClient:
     def __init__(self):
@@ -18,9 +20,11 @@ class FreshdeskClient:
                              data=json.dumps(contact),
                              headers=self.headers)
 
-        if resp.status_code == 201:
-            print("Contact created successfully.")  # implement with Logger
-        else:
-            print("Failed to create a contact.")  # implement with Logger
+        logger.debug(f"Freshdesk response: {resp.text}")
 
-        return resp
+        if resp.status_code == 201:
+            logger.info("Contact created successfully.")
+            return resp
+        else:
+            logger.error("Failed to create a contact.")
+            return resp
